@@ -32,7 +32,7 @@ def product():
         prod = {
             'name': request.form['name'],
             'desc': request.form['desc'],
-            'price': request.form['price']
+            'price': int(request.form['price'])
         }
 
         if op_type == 'add':
@@ -57,7 +57,7 @@ def product():
             updated_product = {
                 'name': new_name,
                 'desc': new_desc,
-                'price': new_price
+                'price': int(new_price)
             }
             product_model.update_products(product_id, updated_product)
 
@@ -117,12 +117,15 @@ def cart():
         return render_template('home.html', name=user_details['name'])
     elif op_type == 'retrieve':
         cart_item_ids = user_model.retrieve_cart(session['user_id'])
-        cart_item = []
+        cart_items = []
+        total = 0
         for p_id in cart_item_ids:
-            cart_item.append(product_model.get_details(p_id))
+            cart_item = product_model.get_details(p_id)
+            cart_items.append(cart_item)
+            total += cart_item['price']
 
         user_details = user_model.search_by_userid(session['user_id'])
-        return render_template('cart.html', products=cart_item, name=user_details['name'])
+        return render_template('cart.html', products=cart_items, name=user_details['name'], total=total)
 
 
 @app.route('/api/admin', methods=['GET', 'POST'])
@@ -133,7 +136,7 @@ def admin():
         return render_template('admin.html', message='Product successfully deleted')
 
     elif request.method == 'GET':
-    # lets search for the product here...
+        # lets search for the product here...
         query_name = request.args['name']
         matching_products = product_model.search_by_name(query_name)
 
