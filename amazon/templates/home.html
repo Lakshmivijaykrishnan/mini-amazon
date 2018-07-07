@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Amazon</title>
+</head>
+<body>
+    <h1> Welcome to Home Page : {{name}}</h1><br>
+
+    <form action="/api/cart" method="post">
+        <input type="text" name="op_type" value="retrieve" hidden>
+        <input type="submit" value="View Cart">
+    </form>
+    <h2>Search</h2>
+    <form action="/api/product" method="get">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="submit" value="SEARCH">
+    </form>
+    <a href="/logout">Logout</a>
+</body>
+</html>
